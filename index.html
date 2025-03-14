@@ -1,759 +1,412 @@
 <!DOCTYPE html>
 <html lang="fr">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Navigation</title>
-    <style>
-        
-        
-.footer {
-    position: fixed;
-    bottom: 0;
-    width: 100%;
-    text-align: center;
-    background-color: #333;  /* Loko mainty */
-    color: white;
-    padding: 10px 0;
-    font-size: 14px;
-    border-top: 1px solid #444;  /* Fefy kely */
-}
-
-
-        .navbar {
-            display: flex;
-            justify-content: center;
-            background-color: #007BFF ;
-            padding: 10px;
-        }
-        .navbar button {
-            background-color: white;
-            border: none;
-            padding: 10px 15px;
-            margin: 5px;
-            cursor: pointer;
-            font-size: 16px;
-            border-radius: 5px;
-        }
-        .navbar button:hover {
-            background-color: #0056b3;
-            color: white;
-        }
-        .content {
-            display: none;
-            padding: 20px;
-            border: 1px solid #ddd;
-            margin-top: 10px;
-        }
-    </style>
+  <meta charset="UTF-8">
+  <title>Inscription & Connexion - Asa En Ligne</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <style>
+    /* Style ankapobeny */
+    body {
+      font-family: Arial, sans-serif;
+      background: #f2f2f2;
+      margin: 0;
+      padding: 20px;
+    }
+    .container {
+      max-width: 400px;
+      margin: 20px auto;
+      background: #fff;
+      padding: 20px;
+      border-radius: 8px;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.2);
+    }
+    h2 { text-align: center; }
+    input[type="text"],
+    input[type="email"],
+    input[type="password"],
+    input[type="number"] {
+      width: 100%;
+      padding: 10px;
+      margin: 5px 0 15px;
+      border: 1px solid #ccc;
+      border-radius: 4px;
+    }
+    button {
+      width: 100%;
+      padding: 10px;
+      background: #28a745;
+      color: #fff;
+      border: none;
+      border-radius: 4px;
+      cursor: pointer;
+      margin-top: 5px;
+    }
+    button:hover { background: #218838; }
+    .link {
+      text-align: center;
+      margin-top: 10px;
+    }
+    a { color: #007bff; text-decoration: none; }
+    a:hover { text-decoration: underline; }
+    .hidden { display: none; }
+    
+    /* Notification admin */
+    #admin-notification {
+      background: #fffae6;
+      border: 1px solid #ffcc00;
+      padding: 10px;
+      border-radius: 4px;
+      margin-bottom: 10px;
+    }
+    #admin-notification p {
+      margin: 0 0 10px 0;
+      font-size: 14px;
+    }
+    #admin-notification button {
+      width: auto;
+      padding: 5px 10px;
+      font-size: 13px;
+      margin-right: 5px;
+    }
+    
+    /* Styles ho an'ny page d'accueil */
+    #homepage {
+      max-width: 1200px;
+      margin: 20px auto;
+      padding: 20px;
+      background: #fff;
+      border-radius: 8px;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+    }
+    /* Navigation horizontal eo ambony ny page d'accueil */
+    .home-nav {
+      display: flex;
+      justify-content: space-around;
+      margin-bottom: 20px;
+    }
+    .home-nav button {
+      flex: 1;
+      margin: 0 5px;
+      padding: 10px;
+      background: #007bff;
+      color: #fff;
+      border: none;
+      border-radius: 4px;
+      cursor: pointer;
+    }
+    .home-nav button:hover {
+      background: #0056b3;
+    }
+    .home-section {
+      display: none;
+    }
+    .home-section.active {
+      display: block;
+    }
+  </style>
 </head>
 <body>
-    
-    
-
-
-    <div class="navbar">
-        <button onclick="showContent('acceuil')">🏠 Acceuil</button>
-        <button onclick="showContent('gratuit')">💶 Asa Gratuit</button>
-        <button onclick="showContent('formation')">📝 HTML</button>
-        <button onclick="showContent('depot')">📩 Dépôt</button>
-        <button onclick="showContent('retrait')">🛄 Retrait</button>
+  <!-- Section d'inscription -->
+  <div id="registration-section" class="container">
+    <h2>Inscription</h2>
+    <form onsubmit="event.preventDefault(); registerUser();">
+      <input type="text" id="full-name" placeholder="Nom complet" required>
+      <input type="email" id="reg-email" placeholder="E-mail" required>
+      <input type="password" id="reg-password" placeholder="Mot de passe" required>
+      <input type="password" id="reg-confirm-password" placeholder="Confirmer mot de passe" required>
+      <button type="submit">S'inscrire</button>
+    </form>
+    <div class="link">
+      Déjà un compte ? <a href="#" onclick="showLoginSection()">Connectez-vous</a>
     </div>
-    
+  </div>
 
-
-<!-- Div ho an'ny valin'ny recherche -->
-<div id="searchResults" style="text-align: center; margin-top: 20px; font-size: 18px; font-weight: bold; color: red;"></div>
-
-    <div class="annonce-container" id="annonce"> <div class="annonce-box">
-    <h1 style ="color :white ;border :5px double yellow ; border-radius : 60px; background-color :blue ; text-align :center ;">FILAZANA ETO AMIN'NY PEJY</h1>
-    
-   <br><br ><br ><br><br ><br ><br ><br ><br ><br ><br ><br ><br ><br ><br ><br ><br ><br ><br ><br ><br ><br ><br ><br ><br><br ><br ><br><br ><br ><br ><br ><br ><br ><br ><br ><br ><br ><br ><br ><br ><br ><br ><br ><br ><br ><br ><br >
-
-<style>
-        
-        /* Annonce */
-        .annonce {
-            position: fixed;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-            background-color: #007bff;
-            color: white;
-            padding: 20px;
-            border-radius: 10px;
-            text-align: center;
-            box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.3);
-            width: 350px;
-            z-index: 1000;
-        }
-        /* Bokotra Fermer */
-        .fermer-btn {
-            margin-top: 15px;
-            background: red;
-            border: none;
-            color: white;
-            padding: 10px 15px;
-            cursor: pointer;
-            border-radius: 5px;
-            font-size: 16px;
-        }
-        .fermer-btn:hover {
-            background: darkred;
-        }
-    </style>
-    <!-- Tidio Chat Script -->
-    <script src="//code.tidio.co/qohm2j6hy5em7agru8tgjkx0b52hw6wj.js" async></script>
-    !-- Annonce --
-    <div class="annonce" id="annonce">
-        <h2> 🌐 FILAZANA MANAN-DANJA 🌐</h2>
-        <p>Hisoratra tsy hoela ny fampianarana trading bot gratuit miaraka amin'ny fizarana robot efa maimaimpoana eto amin'ny pejy ity. Izany dia natokana ho an'i mpianatra ato aminay ihany. Ny tanjona dia isika rehetra miara-tafa </p>
-
-            
-        <button class="fermer-btn" onclick="document.getElementById('annonce').style.display='none'">Fermer</button>
+  <!-- Section de connexion initiale -->
+  <div id="login-section" class="container hidden">
+    <h2>Connexion</h2>
+    <form onsubmit="event.preventDefault(); loginUser();">
+      <input type="email" id="login-email" placeholder="E-mail" required>
+      <input type="password" id="login-password" placeholder="Mot de passe" required>
+      <button type="submit">Se connecter</button>
+    </form>
+    <div class="link">
+      <a href="#" onclick="resetPassword()">Mot de passe oublié ?</a>
     </div>
-
-
-
-
-    <
-<p style ="color :white ;border :5px double yellow ; border-radius : 60px; background-color :blue ; text-align :center ;"><strong >Misokatra Amin’izao Ny Site Web Asa En Ligne!  </strong ><br ><br ><br >
-
-Faly izahay manambara fa efa  amin’ny fomba ofisialy ny tranokalanay, <strong >Asa En Ligne!</strong > Ity no sehatra natao in > anao hahita fomba fitadiavam-bola amin’ny aterineto, hahazoana torohevitra sy fitaovana hanatsarana ny fidiram-bolanao. <br><br >
-
-Manolotra <strong >vahaolana</strong > mazava sy azo ampiharina izahay ho an’ireo te hiroboka amin’ny asa an-tserasera, manomboka amin’ny fananganana tranokala ka hatramin’ny fidirana amin’ny varotra nomerika. <br ><br >
-
-Tsidiho izao ary manomboka amin’ny lalana mankany amin’ny fahombiazana!
-            <div class="annonce-buttons">
-                
-            </div>
-        </div>
+    <div class="link">
+      Pas de compte ? <a href="#" onclick="showRegistrationSection()">S'inscrire</a>
     </div>
+  </div>
 
-  
-         <script>
-        function fermerAnnonce() {
-            document.getElementById("annonce").style.opacity = "0";
-            setTimeout(() => {
-                document.getElementById("annonce").style.visibility = "hidden";
-            }, 500);
-        }
-    </script> 
-    
-    <p style ="border: 2px double blue ; border-radius :15px ; background-color :white ; color :black ; text-align :center ;"><strong >Torolalana</strong ><br >
-Raha <strong>hampiasa vola</strong> ianao, midira ao amin'ny section<strong> Accueil</strong>, safidio ireo site d'investissement'tinao, tsindrio ny bokitra <strong>s'inscrire</strong> raha hanao inscription. Raha manana olana dia mifandraisa aminay amin'ny alalan'ny whatsapp. Kitio ny bokitra <strong>whatsapp</strong><br>
+  <!-- Section fampahafantarana fandoavana -->
+  <div id="payment-instructions" class="container hidden">
+    <h2>Effectuez votre paiement</h2>
+    <p>Pour recevoir votre code d'activation, veuillez envoyer <strong>1000 Ar</strong> isambolana amin'ireo laharana manaraka:</p>
+    <ul>
+      <li>0323911654 [RAVELOMANANTSOA Urmin]</li>
+      <li>0384557584 [BEFOTSY Ranjity]</li>
+      <li>0333635111 [RANAIVOSON Angelo]</li>
+    </ul>
+    <button onclick="showPaymentProofForm()">J'ai payé</button>
+  </div>
 
-Raha hijery asa <strong>gratuit</strong>, midira amin'ny section <strong>gratuit</strong> manaova <strong>inscription</strong>. Manao <strong>Rejoindre groupe</strong> raha mbola debutant ianao, kitio ihany ilay soratra <strong>rejoindre le groupe.</strong><br> 
+  <!-- Formulaire de preuve de paiement -->
+  <div id="payment-proof" class="container hidden">
+    <h2>Preuve de paiement</h2>
+    <input type="text" id="proof-fullname" placeholder="Nom complet" required>
+    <input type="text" id="proof-phone" placeholder="Numéro de téléphone utilisé" required>
+    <input type="number" id="proof-amount" placeholder="Montant à payer" required>
+    <button onclick="submitPaymentProof()">Envoyer</button>
+  </div>
 
-Raha ianatra développement Web, kitina ilay bokitra <strong>html</strong>, araho ny torolalana.<br> 
+  <!-- Notification de paiement en attente -->
+  <div id="pending-verification" class="container hidden">
+    <h2>En attente de vérification</h2>
+    <p>Votre demande de paiement est en attente de vérification par l'administration.</p>
+  </div>
 
-Raha te hanao <strong>retrait na depot</strong>, tsindrio ny bokitra <strong>retrait /dépôt</strong>, araho ny torolalana. </p><br>
-
-   
-          
-
-    <div id="acceuil" class="content">
-        
-        
-        
-    <html lang="fr">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Message Défilant</title>
-</head>
-
-
-    <!-- Boaty misy message -->
-    <div style="border: 2px solid blue; padding: 15px; width: 80%; margin: auto; border-radius: 20px; background-color: white; color: black; position: relative; display: flex; align-items: center; justify-content: center;">
-        
-        <!-- Soratra mihetsika -->
-        <marquee style="width: 90%; overflow: hidden; white-space: nowrap; font-size: 16px; font-weight: bold; color: black;" direction="left" scrollamount="5">
-            🎉 ✅ Efa Misokatra Ny Site Web Asa En Ligne! ✅ 📢 Vaovao Mahafaly! Efa azonao tsidihana amin’izao fotoana izao ny Asa En Ligne, sehatra natao hanampiana anao hahita asa sy fitadiavam-bola amin’ny aterineto! 🚀 Manome torohevitra sy fitaovana hanatsarana ny fidiram-bolanao izahay, ary manome vahaolana ho an’ireo te hiroboka amin’ny asa an-tserasera. 👉 Tsidiho izao ary manomboha amin’ny lalana mankany amin’ny fahombiazana! Azonao atao koa manao transaction eto aminay. Toy ny depot retrait amin'ny mobile money na amin'ny portefeuille na amin'ny site 🚀
-        </marquee>
-
-        <!-- Sary lakilosy eo amin'ny farany -->
-        <img src="https://cdn-icons-png.flaticon.com/512/1827/1827366.png" alt="Lakilosy" style="width: 25px; height: 25px; margin-left: 10px;">
+  <!-- Notification d'activation -->
+  <div id="activation-notification" class="container hidden">
+    <h2>Paiement confirmé</h2>
+    <div id="admin-notification" class="hidden">
+      <p id="admin-notification-text">Vous avez un message de l'admin.</p>
+      <button onclick="viewAdminMessage()">Voir</button>
+      <button onclick="dismissAdminMessage()">Fermer</button>
     </div>
+    <p id="activation-code-container">Voici votre nouveau code d'activation : <strong id="user-activation-code"></strong></p>
+    <button onclick="showFinalActivationForm()">Connectez-vous</button>
+  </div>
 
-</body>
-</html>
+  <!-- Formulaire final d'activation -->
+  <div id="final-activation-form" class="container hidden">
+    <h2>Connexion - Activation</h2>
+    <form onsubmit="event.preventDefault(); finalLogin();">
+      <input type="email" id="final-email" placeholder="E-mail" required>
+      <input type="password" id="final-password" placeholder="Mot de passe" required>
+      <input type="text" id="final-activation-code" placeholder="Code d'activation" required>
+      <button type="submit">Entrer</button>
+    </form>
+  </div>
 
-    
-    
-    
-        <div style="text-align: center; width: 90%; max-width: 600px;">
-        
-        <h2 style="color: #8B4513; font-size: 26px; margin-bottom: 20px;">📢 SITE FAMPIASAM-BOLA MAHARITRA 🌍</h2>
-        
-        
-        <style>
-    .publicite {
-        font-family: Arial, sans-serif;
-        background-color: #f9f9f9;
-        border-radius: 8px;
-        padding: 20px;
-        margin: 20px 0;
-        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-    }
-    .publicite h2 {
-        color: #1e3d58;
-    }
-    .publicite p {
-        font-size: 16px;
-        color: #333;
-        line-height: 1.6;
-    }
-    .publicite .btn {
-        display: inline-block;
-        background-color: #28a745;
-        color: white;
-        padding: 10px 20px;
-        border-radius: 5px;
-        text-decoration: none;
-        margin-top: 20px;
-        font-weight: bold;
-    }
-    .publicite .btn:hover {
-        background-color: #218838;
-    }
-</style>
-<center >
-    
-    <h1 style ="color :blue ;">META EGG</h1>
-    <h3 style ="color :blue ;">FANAZAVANA </h3>
-    <p>
-<strong>META EGG</strong> dia orinasa azo antoka misehatra amin'ny resaka <strong>farm</strong> 🏡. Io dia sehatra iray ahafahanao mividy plan na package izay miteraka tombony isan'andro. Ity orinasa ity dia manolotra safidy maro sy fomba fiasa tsotra izay ahafahanao mampitombo ny volanao amin'ny alalan'ny fampiasam-bola voafehy sy azo antoka.<br><br>
-
-<strong>Fepetra amin'ny fametrahana sy fanalana vola:</strong><br>
-- <span style="color: blue;"><strong>Minimum de dépôt :</strong> 5$</span><br>
-- <span style="color: green;"><strong>Minimum de retrait USDT :</strong> 2$</span><br>
-- <span style="color: red;"><strong>Minimum de retrait TRX :</strong> 5 TRX</span><br><br>
-
-<span style="color: blue; font-weight: bold;">NB:</span> Ny solde miasa ao amin'ny META EGG dia antsoina hoe <strong>COIN</strong>, izay avadika ho <strong>EGG</strong> rehefa ampy. Avadika <strong>USDT</strong> ny COIN rehefa mahatratra <strong>1 EGG</strong> izany. <span style="color: green;"><strong>1 EGG = 0,45 USDT</strong></span>.<br><br>
-
-<strong>Package na plan azo vidina:</strong><br>
-- 🛎️ 3 Plan = 9$ ➡️ Mahazo 0,49 EGG isan'andro (0,22$ isan'andro)<br>
-- 🛎️ 5 Plan = 15$ ➡️ Mahazo 0,83 EGG isan'andro (0,37$ isan'andro)<br>
-- 🛎️ 7 Plan = 21$ ➡️ Mahazo 1,10 EGG isan'andro (0,50$ isan'andro)<br>
-- 🛎️ 10 Plan = 30$ ➡️ Mahazo 1,44 EGG isan'andro (0,65$ isan'andro)<br>
-- 🛎️ 20 Plan = 60$ ➡️ Mahazo 2,49 EGG isan'andro (1,12$ isan'andro)<br>
-- 🛎️ 50 Plan = 150$ ➡️ Mahazo 4,83 EGG isan'andro (2,17$ isan'andro)<br>
-- 🛎️ 100 Plan = 300$ ➡️ Mahazo 5,66 EGG isan'andro (2,54$ isan'andro)<br><br>
-
-<span style="color: blue; font-weight: bold;">NB :</span> Na dia somary kely aza ny gains azo isan'andro, dia maharitra sy azo antoka izany. Mila <strong>presence</strong> isan'andro ianao mba hitakiana ny gains ary tsy adino ny manao <strong>check-in</strong> isan'andro mba hahazoana <strong>coin</strong> fanampiny.<br><br>
-
-<span style="color: red; font-weight: bold;">Avis important :</span> Tonga <strong>1 EGG</strong> ny balance vao afaka avadika ho <strong>USDT</strong>.<br><br>
-
-<span style="color: green; font-weight: bold;">Fanamarihana:</span> Misy <strong>plan gratuit</strong> ihany koa izay ahafahanao mahazo <strong>0,16 EGG</strong> isan'andro na <strong>0,07$</strong> isan'andro.<br><br>
-
-
-
-Mba hisoratra anarana, tsindrio eto: <a href="https://www.metaegg.gg/#/pages/public/login/register?user_code=7195084&lang=en" style="color: blue; font-weight: bold;">Rohy fisoratana anarana META EGG</a>.
-</p>
-<a href="https://www.metaegg.gg/#/pages/public/login/register?user_code=7195084&lang=en">S''inscrire </a>    
-   <div class="invitation-container">
-        <h2>Code d'Invitation :</h2>
-        <div class="code-box">
-            <span id="invitation-code">7195084</span>
-            <button onclick="copyCode()" class="copy-btn">Copier</button>
-        </div>
-        <p id="copy-success" style="display: none; color: green;">Code copié avec succès !</p>
+  <!-- Page d'accueil (miseho rehefa activation vita) -->
+  <div id="homepage" class="container hidden">
+    <!-- Navigation horizontal ho an'ny section -->
+    <div class="home-nav">
+      <button onclick="showSection('asaMampiasaVola')">Asa Mampiasa Vola</button>
+      <button onclick="showSection('asaGratuit')">Asa Gratuit</button>
+      <button onclick="showSection('formationTrading')">Formation Trading</button>
+      <button onclick="showSection('transaction')">Transaction</button>
     </div>
-
-    <script>
-        function copyCode() {
-            const code = document.getElementById("invitation-code").innerText;
-            navigator.clipboard.writeText(code).then(function() {
-                const successMessage = document.getElementById("copy-success");
-                successMessage.style.display = "block";
-                setTimeout(() => {
-                    successMessage.style.display = "none";
-                }, 2000);
-            });
-        }
-    </script> 
-    
-    <h3 style ="color:blue ;">TUTO COMPLET INSCRIPTION /DEPOT /RETRAIT /TÂCHE /</h3><br >
-    
-    <iframe width="320" height="320" 
-    src="https://www.youtube.com/embed/u9y8OafFeFk" 
-    title="YouTube video player" 
-    frameborder="0" 
-    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" 
-    allowfullscreen>
-</iframe>
-
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-<div class="publicite">
-    <h2 style="color: red;">EVO-FINANCE </h2>
+    <!-- Contenu isaky ny section -->
+    <div id="homepage-content">
+      <div id="asaMampiasaVola" class="home-section active">
+        <h2>Asa Mampiasa Vola</h2>
+        <p>Ireto avy ny mampiasa vola Misy ato aminay izay Azo antoka tsara ary tsy Misy atahorana ho tapaka .</p>
+        <center>
+        <ul><li>NY EVO FINANCE </li></ul>
+          <h2 style="color: red;">EVO-FINANCE </h2>
     <p>EVO-FINANCE dia sehatra vaovao amin'ny fampiasam-bola, nivoaka tamin'ny herinandro lasa teo. Ity site ity dia azo antoka tsara ary natao haharitra, ka safidy tsara ho an'izay te hampitombo ny volany amin'ny alalan'ny investissement.</p>  
+ 
 
-<p><strong>Plan d’investissement</strong></p>  
-
-<p>EVO-FINANCE dia manana plan d’investissement roa mazava tsara:</p>  
-
-<p><strong>1. Plan miaraka amin’ny retrait du fond sy ny gains rehefa tapitra ny contrat</strong></p>  
-<p>Ity plan ity dia ahafahana maka indray ny fond d’investissement miaraka amin’ny tombony azo rehefa tapitra ny fe-potoana fifanarahana.</p>  
-
-<p>- <strong>Niveau 1</strong>: Contrat 1 volana, dépôt <strong>2.5$ - 200$</strong>, tombony <strong>5%</strong> rehefa tapitra ny contrat.</p>  
-<p>- <strong>Niveau 2</strong>: Contrat 3 volana, dépôt <strong>501$ - 1000$</strong>, tombony <strong>5.5% isam-bolana</strong>.</p>  
-<p>- <strong>Niveau 3</strong>: Dépôt <strong>1001$ miakatra</strong>, tombony <strong>6.5% isam-bolana</strong>.</p>  
-
-<p>Azo alaina amin’ny fotoana iray ihany ny vola nampiasaina sy ny tombony rehefa tapitra ny contrat.</p>  
-
-<p><strong>2. Plan izay tsy azo alaina ny fond d’investissement fa ny gains ihany no azo alaina</strong></p>  
+<p><strong> PLAN D'INVESTISSMENT </strong></p>  
 <p>Ity dia natao ho an’izay te hahazo vola isan’andro amin’ny alalan’ny tombony azo amin’ny fampiasam-bola.</p>  
 
-<p>- <strong>Niveau 1</strong>: Dépôt <strong>15$ - 200$</strong>, tombony <strong>1.5% isan’andro</strong>.</p>  
-<p>- <strong>Niveau 2</strong>: Dépôt <strong>200$ - 999$</strong>, tombony <strong>1.6% isan’andro</strong>.</p>  
-<p>- <strong>Niveau 3</strong>: Dépôt <strong>1000$ miakatra</strong>, tombony <strong>1.8% isan’andro</strong>.</p>  
+<p>- <strong>Niveau 1</strong>: Dépôt <strong>10$ - 200$</strong>, tombony <strong>2.5% isan’andro</strong>.</p>  
+<p>- <strong>Niveau 2</strong>: Dépôt <strong>200$ - 999$</strong>, tombony <strong>2.6% isan’andro</strong>.</p>  
+<p>- <strong>Niveau 3</strong>: Dépôt <strong>1000$ miakatra</strong>, tombony <strong>2.7% isan’andro</strong>.</p>  
 
 <p>Ity plan ity dia manome fidiram-bola matotra ho an’izay mampiasa vola amin’ny site.</p>  
 
 <p>EVO-FINANCE dia mametraka rafitra mazava sy azo antoka amin’ny fampiasam-bola, ka anjaranao no misafidy izay mety aminao!</p>
 
-<a href="https://evo-finance-quipe-ivl7.vercel.app/?ref=ABC123">s'inscrire </a>
+<a href="https://evo-finance-inscription-ao1m.vercel.app/">s'inscrir / hisoratra anarana </a>
 </center >
 <h3 style ="color : red ;">TUTO D'INSCRIPTION EVO-FINANCE </h3>
 
-<iframe width="320" height="320" src="https://www.youtube.com/embed/xtiLZDx6rlc" frameborder="0" allowfullscreen></iframe>
+<iframe width="320" height="320" src="https://www.youtube.com/embed/xtiLZDx6rlc" frameborder="0" allowfullscreen></iframe><br><br>
 
- 
-        <h3 style="color: red; font-size: 22px;">🌍 WEB3 GPT 🌎</h3>
-
-        <p style="
-            background-color: #D2691E; 
-            color: white; 
-            padding: 20px; 
-            border-radius: 10px; 
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); 
-            font-size: 18px; 
-            margin-bottom: 20px;
-            border: 3px solid #8B4513;
-        ">
-            Ity no siteizay efa vita analyse tsara, fa mbola haharitra 5 mois. Izao no fotoana mety raha hanomboka ampiasa vola ianao. Aza miandry ela, fa asa en ligne no ataontsika.<br><br>
-
-            Azonao atao ny manomboka amin'ny dépôt 10$. Ho an'izay tsy manana portefeuille électronique, dia izahay no manao dépôt direct amin'ny site ho anao. Azonao atao ihany koa ny manao dépôt amin'ny Mobile Money.<br><br>
-
-            Tsindrio ny bokotra "S'inscrire"eo ambany raha te hanao investissement. Afaka manao dépôt amin'ny portefeuille électronique ihany koa izahay.
-        </p>
-
-        <a href="https://web3-gpt.lat/#/pages/account/register?shareCode=23454294 " style="
-            display: inline-block; 
-            background-color: #8B4513; 
-            color: white; 
-            padding: 15px 30px; 
-            font-size: 18px; 
-            border-radius: 10px; 
-            text-decoration: none; 
-            font-weight: bold;
-            margin-bottom: 20px;
-        ">S'inscrire</a>
-
-        <h3 style="color: red; font-size: 22px;">3⃣ Plan d'investissement 🎆</h3>
-
-        <p style="
-            background-color: #FFF; 
-            color: #8B4513; 
-            padding: 15px; 
-            border-radius: 10px; 
-            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2); 
-            font-size: 16px; 
-            border: 2px solid #D2691E;
-        ">
-            ✅ Dépôt 10$⏭️ Gains 2.50% na 0.25$ par jours <br><br>
-            ✅ Dépôt 20$ ⏭️ Gains 0.50$ par jours** <br><br>
-            ✅ Dépôt 50$ ⏭️ Gains 1.25$ par jours** <br><br>
-            ✅ Dépôt 100$⏭️ Gains 2.50$ par jours** <br><br>
-            ✅ Dépôt 200$ ⏭️ Gains 5$ par jours
-        </p>
-
-    </div>
-
-
-
-    
-    <div style="display: flex; align-items: center; gap: 10px;">
-    <strong style="font-size: 18px; font-weight: bold; color: #333;">Code d'invitation :</strong>
-    <span onclick="navigator.clipboard.writeText('23454294')" style="cursor: pointer; display: flex; align-items: center; padding: 8px 15px; background-color: #4CAF50; color: white; border-radius: 5px; font-size: 16px; transition: background-color 0.3s;">
-        Copier 
-        <img src="https://cdn-icons-png.flaticon.com/512/54/54702.png" alt="Copy icon" style="width: 20px; margin-left: 5px;">
-    </span>
-</div><br ><br >
 </center>
 
+<h2 style ="color :blue ;text -align : center ;">WEB3 GPT </h2>
+    <center ><p><br><br>  
+  Ity no site izay efa vita analyse tsara, fa mbola haharitra 5 mois. Izao no fotoana mety raha hanomboka ampiasa vola ianao. Aza miandry ela, fa asa en ligne no ataontsika. Azonao atao ny manomboka amin'ny dépôt <strong>10$</strong>. Ho an'izay tsy manana <strong>portefeuille électronique</strong>, dia izahay no manao <strong>dépôt direct</strong> amin'ny site ho anao. Azonao atao ihany koa ny manao <strong>dépôt amin'ny Mobile Money</strong>.  
+</p>  
 
+<p>  
+  Tsindrio ny bokotra <strong>"<a href="https://web3-gpt.lat/#/pages/account/register?shareCode=23454294">s'inscrir'</a>"</strong> eto  raha te hanao investissement. Afaka manao dépôt amin'ny <strong>portefeuille électronique</strong> ihany koa izahay.  
+</p>  
 
-
-<a href="https://bot-site-web-asa-en-ligne-mada.vercel.app/" class="service-client-btn" target="_blank">
-    💬Support en ligne 
-</a>
-
-
-<center >
-
-
-<div style="text-align: center; width: 80%; max-width: 600px; "><br ><br ><br ><br ><br ><br ><br ><br >
- <h1 style="color : red; ">🌌SF QI PLATFORMS🌌 </h1>
-        <p style="
-            background-color: #D2691E; 
-            color: white; 
-            padding: 20px; 
-            border-radius: 10px; 
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); 
-            font-size: 18px; 
-            margin-bottom: 10px;
-            border: 3px solid #8B4513;
-        ">
-            <strong>Ity koa ny site d'investissement faharoa izay efa vita analyse fa mbola haharitra 5mois.</strong><br><br>
-            Tamin'ny <strong>15 août 2024</strong> izy io no nivoaka, tsy ny gasy ihany no manao an'ity fa efa olona maneran-tany.<br><br>
-            <strong>10$</strong> ihany dia efa azonao ampiasaina ato. Araho ny plan d'investissement eto ambany.
-        </p>
-    </div>
-             <h3> PLAN D'INVESTISSEMENT </h3>
-
-
-
-    <div style="text-align: center; width: 80%; max-width: 600px;">
-        <p style="
-            background-color: #D2691E; 
-            color: white; 
-            padding: 15px; 
-            border-radius: 10px; 
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); 
-            font-size: 18px; 
-            margin-bottom: 10px;
-            border: 3px solid #8B4513;
-        ">⬛Manao dépôt 10$ 💵gains 0.25$ par jours✅</p>
-        
-        <p style="
-            background-color: #D2691E; 
-            color: white; 
-            padding: 15px; 
-            border-radius: 10px; 
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); 
-            font-size: 18px; 
-            margin-bottom: 10px;
-            border: 3px solid #8B4513;
-        ">⬛Manao dépôt 20$ 💵gains 0.50$ par jours✅</p>
-        
-        <p style="
-            background-color: #D2691E; 
-            color: white; 
-            padding: 15px; 
-            border-radius: 10px; 
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); 
-            font-size: 18px; 
-            margin-bottom: 10px;
-            border: 3px solid #8B4513;
-        ">⬛Manao dépôt 50$ 💵gains 1.25$ par jours✅</p>
-        
-        <p style="
-            background-color: #D2691E; 
-            color: white; 
-            padding: 15px; 
-            border-radius: 10px; 
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); 
-            font-size: 18px; 
-            margin-bottom: 10px;
-            border: 3px solid #8B4513;
-        ">⬛Manao dépôt 100$ 💵gains 2.50$ par jours✅</p>
-        
-        <p style="
-            background-color: #D2691E; 
-            color: white; 
-            padding: 15px; 
-            border-radius: 10px; 
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); 
-            font-size: 18px; 
-            margin-bottom: 10px;
-            border: 3px solid #8B4513;
-        ">⬛Manao dépôt 200$ 💵gains 5$ par jours✅</p>
-    </div>
-
-             
-             <a href="https://www.sf-qi.co/#/pages/register?referral_code=HG77YG">s'inscrire</a><br ><br >
-             
-             <div style="display: flex; align-items: center; gap: 10px;">
-    <strong style="font-size: 18px; font-weight: bold; color: #333;">Code d'invitation :</strong>
-    <span onclick="navigator.clipboard.writeText('HG77YG')" style="cursor: pointer; display: flex; align-items: center; padding: 8px 15px; background-color: #4CAF50; color: white; border-radius: 5px; font-size: 16px; transition: background-color 0.3s;">
-        Copier 
-        <img src="https://cdn-icons-png.flaticon.com/512/54/54702.png" alt="Copy icon" style="width: 20px; margin-left: 5px;">
-    </span>
-</div><br ><br ><br >
-         </center><br ><br >
-         <a href="https://bot-site-web-asa-en-ligne-mada.vercel.app/" class="service-client-btn" target="_blank">
-    💬  
-</a>
-
-                      
-                      <center>
-                        <h1 style ="color : red;">💲💶GDQ-WEB3💶💲</h1> <br >
-                        <p style="
-        background-color: #D2691E; 
-        color: white; 
-        padding: 20px; 
-        border-radius: 10px; 
-        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); 
-        text-align: center; 
-        font-family: Arial, sans-serif;
-        font-size: 18px;
-        width: 80%;
-        max-width: 600px;
-        border: 3px solid #8B4513;
-        ">
-        
-        <strong>Ity indray site vaovao, nivoaka amin'ity taona 2025 ity.</strong><br><br>
-        Izahay dia manome garantie ho an'i mpanaraka anay fa maharitra <strong>10 mois</strong> ity site ity.<br><br>
-        Hararaoty foana rehefa misy zavatra vaovao mivoaka toy izao, aza miandry efa <strong>7 mois</strong> nivoahany izay vao hanomboka hanao an'ilay izy.<br><br>
-        <strong>Izao no fotoana</strong> izay afahanao manomboka sady mbola tsy misy <strong>risque de perte</strong> mihitsy, raha izao ianao no hanomboka hanao an'ilay izy.<br><br>
-        <em>Harao eto ambany ny plan d'investissement.</em>
+<p>  
+  <strong>🏆 Plan d'investissement 🎆</strong><br>  
+  ✅ <strong>Dépôt 10$</strong> ⏭️ <strong>Gains 2.50% na 0.25$ par jours</strong><br>  
+  ✅ <strong>Dépôt 20$</strong> ⏭️ <strong>Gains 0.50$ par jours</strong><br>  
+  ✅ <strong>Dépôt 50$</strong> ⏭️ <strong>Gains 1.25$ par jours</strong><br>  
+  ✅ <strong>Dépôt 100$</strong> ⏭️ <strong>Gains 2.50$ par jours</strong><br>  
+  ✅ <strong>Dépôt 200$</strong> ⏭️ <strong>Gains 5$ par jours</strong>  
+</p></center> <br><br>  
     
-    </p>
-                        
-                        <h3>PLAN D'INVESTISSEMENT </h3><br >
-                        
-    <div style="text-align: center; width: 80%; max-width: 600px;">
-        <p style="
-            background-color: #D2691E; 
-            color: white; 
-            padding: 15px; 
-            border-radius: 10px; 
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); 
-            font-size: 18px; 
-            margin-bottom: 10px;
-            border: 3px solid #8B4513;
-        ">👉 Depot 10$~29$⏭️ gains 1.3%. Mahazo 2 tâche par jours.</p>
-        
-        <p style="
-            background-color: #D2691E; 
-            color: white; 
-            padding: 15px; 
-            border-radius: 10px; 
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); 
-            font-size: 18px; 
-            margin-bottom: 10px;
-            border: 3px solid #8B4513;
-        ">👉 Depot 30$~499$⏭️ gains 2%. Mahazo 4 tâche par jours.</p>
-        
-        <p style="
-            background-color: #D2691E; 
-            color: white; 
-            padding: 15px; 
-            border-radius: 10px; 
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); 
-            font-size: 18px; 
-            margin-bottom: 10px;
-            border: 3px solid #8B4513;
-        ">👉 Depot plus 500$⏭️ gains 3.3%. Mahazo 5 tâche par jours.</p>
-    </div>
+   <a href="https://web3-gpt.lat/#/pages/account/register?shareCode=23454294">s'inscrir / hisoratra anarana </a> 
+<h2 style ="color :blue ;text -align : center ;">SUPPORT FINANCE </h2>
+    <center ><p><br><br>     
+    <p>  
+  🌌<strong>SF QI PLATFORMS</strong>🌌  
+  Ity koa ny site d'investissement faharoa izay efa vita analyse fa mbola haharitra <strong>5 mois</strong>.  
+</p>  
 
+<p>  
+  Tamin'ny <strong>15 août 2024</strong> izy io no nivoaka, tsy ny gasy ihany no manao an'ity fa efa olona maneran-tany.  
+</p>  
 
+<p>  
+  <strong>10$</strong> ihany dia efa azonao ampiasaina ato. Araho ny <strong>plan d'investissement</strong> eto ambany.  
+</p>  
 
-                          
-                              
-                      
-                      
-                      
-                          <a href="https://gdqai.com/#/register?i=711456">s'inscrire </a><br ><br >
-                          
-                          <div style="display: flex; align-items: center; gap: 10px;">
-    <strong style="font-size: 18px; font-weight: bold; color: #333;">Code d'invitation :</strong>
-    <span onclick="navigator.clipboard.writeText('711456 ')" style="cursor: pointer; display: flex; align-items: center; padding: 8px 15px; background-color: #4CAF50; color: white; border-radius: 5px; font-size: 16px; transition: background-color 0.3s;">
-        Copier 
-        <img src="https://cdn-icons-png.flaticon.com/512/54/54702.png" alt="Copy icon" style="width: 20px; margin-left: 5px;">
-    </span>
-</div><br ><br ><br >
-
-<h3 style ="color:white ;border :1px solid black ;background-color :black ;border-radius :15px ; text-align :center ;">TUTORIEL D'INSCRIPTION GDQ WEB3 </h3>
-
-<div style="
-        background: white;
-        padding: 20px;
-        border-radius: 10px;
-        box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
-        display: inline-block;
-    ">
-        <iframe width="320" height="320" 
-            src="https://www.youtube.com/embed/L4IaJHj71Ec " 
-            frameborder="0" allowfullscreen style="
-            border-radius: 5px;">
-        </iframe>
-        
-        <br>
-    </div>
-    <h3 style ="color:white ;border :1px solid black ;background-color :black ;border-radius :15px ; text-align :center ;">TUTORIEL DU DEPOT GDQ WEB3 </h3>
-    <div style="
-        background: white;
-        padding: 20px;
-        border-radius: 10px;
-        box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
-        display: inline-block;
-    ">
-        <iframe width="320" height="320" 
-            src="https://www.youtube.com/embed/4zvlelfsRNQ " 
-            frameborder="0" allowfullscreen style="
-            border-radius: 5px;">
-        </iframe>
-        
-        <br>
-    </div>
-    <h3 style ="color:white ;border :1px solid black ;background-color :black ;border-radius :15px ; text-align :center ;">TUTORIEL DU RETRAIT GDQ WEB3 </h3>
-    <div style="
-        background: white;
-        padding: 20px;
-        border-radius: 10px;
-        box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
-        display: inline-block;
-    ">
-        <iframe width="320" height="320" 
-            src="https://www.youtube.com/embed/iVBlzIWj0Do " 
-            frameborder="0" allowfullscreen style="
-            border-radius: 5px;">
-        </iframe>
-        
-        <br>
-    </div>
-
-<a href="https://bot-site-web-asa-en-ligne-mada.vercel.app/" class="service-client-btn" target="_blank">
-    💬Support en ligne 
-</a>
-
-                          
-                          
-                      </center>
-                      
-                      <center >
-    <div style="text-align: center; width: 80%; max-width: 600px;">
-        
-        <h2 style="color: red; font-size: 24px; margin-bottom: 20px;">💶CAPITAL FINANCE 💶</h2>
-        
-        <p style="
-            background-color: #D2691E; 
-            color: white; 
-            padding: 20px; 
-            border-radius: 10px; 
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); 
-            font-size: 18px; 
-            margin-bottom: 20px;
-            border: 3px solid #8B4513;
-        ">
-            Capital Finance dia site nivoaka tamin'ny taona <strong>2017</strong>, manolotra fomba fidiram-bola amin'ny alalan'ny fametrahana vola amin'ny rafitra manokana. Izy io dia anisan'ny toerana fanta-daza indrindra amin'ny fidiram-bola ao amin'ny sehatra ara-bola.<br><br>
-
-            Raha te hahazo vola amin'izany , dia azonao atao ny manaraka ireo plan azo isafidianana:<br><br>
-
-            <strong>Plan 1:</strong><br>
-            - <strong>Dépôt:</strong> 5$~500$<br>
-            - <strong>Gains:</strong> 120%<br><br>
-            -<strong>contrat :</strong> 90 jours na 3mois <br><br>
-            -<strong>Gains par mois :</strong> 40%<br><br>
-
-            <strong>Plan 2:</strong><br>
-            - <strong>Dépôt:</strong> 50$~~5000$<br>
-            - <strong>Gains total :</strong> 130%<br><br>
-            -<strong>Gains par mois :</strong> 43.33%<br><br>
-            -<strong>contrat :</strong> 3mois <br><br>
-            
-
-            <strong>Plan 3:</strong><br>
-            - <strong>Dépôt:</strong> 100$~10.000$<br>
-            - <strong>Gains total cool :</strong> 140%<br><br>
-            <strong>Gains par mois :</strong> 46.66%<br><br>
-            <strong>contrat :</strong> 3mois 
+<p>  
+  <strong>📌 PLAN D'INVESTISSEMENT</strong><br>  
+  ⬛ Manao dépôt <strong>10$</strong> 💵 gains <strong>0.25$ par jours</strong> ✅<br>  
+  ⬛ Manao dépôt <strong>20$</strong> 💵 gains <strong>0.50$ par jours</strong> ✅<br>  
+  ⬛ Manao dépôt <strong>50$</strong> 💵 gains <strong>1.25$ par jours</strong> ✅<br>  
+  ⬛ Manao dépôt <strong>100$</strong> 💵 gains <strong>2.50$ par jours</strong> ✅<br>  
+  ⬛ Manao dépôt <strong>200$</strong> 💵 gains <strong>5$ par jours</strong> ✅  
 </p>
 
-        <a href="https://my-capitalfinance.net/signup.php?refer=Valerida&ral=23874" style="
-            display: inline-block; 
-            background-color: #D2691E; 
-            color: white; 
-            padding: 15px 30px; 
-            font-size: 18px; 
-            border-radius: 10px; 
-            text-decoration: none; 
-            font-weight: bold;
-            margin-top: 20px;
-        ">S'inscrire</a>
-    </div>
-    
-    <a href="https://wa.me/261323911654" class="whatsapp-btn" target="_blank">
-    <img src="https://upload.wikimedia.org/wikipedia/commons/6/6b/WhatsApp.svg" alt="WhatsApp" class="whatsapp-icon">
-</a><br ><br ><br >
-<!-- service client -->
-<style >
-.whatsapp-btn {
-    position: fixed;
-    top: 50%; /* Apetraka anivo */
-    right: 20px; /* Apetraka eo amin'ny sisiny droit */
-    width: 60px;
-    height: 60px;
-    background-color: #25D366; /* Loko WhatsApp */
-    border-radius: 50%;
-    text-decoration: none;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    box-shadow: 2px 2px 10px rgba(0, 0, 0, 0.2);
-    transition: transform 0.3s ease, background-color 0.3s ease;
-}
-
-.whatsapp-btn:hover {
-    background-color: #1EBE5D; /* Loko maizina kokoa rehefa hover */
-    transform: scale(1.1); /* Manitatra kely rehefa ampifantarina */
-}
-
-.whatsapp-icon {
-    width: 35px; /* Habe amin'ny sary */
-    height: 35px;
-}
- </style >
+<a href="https://www.sf-qi.co/#/pages/register?referral_code=HG77YG">s'inscrir/hisoratra anarana</a>
 
 
-    <a href="https://bot-site-web-asa-en-ligne-mada.vercel.app/" class="service-client-btn" target="_blank">
-    💬
-</a>
+<h2 style ="color :blue ;text -align : center ;">GDQ WEB3 </h2>
+    <center ><p><br><br> 
+<p>  
+  💲💶<strong>GDQ-WEB3</strong>💶💲  
+</p>  
 
-<!--  -->
-<style >.service-client-btn {
-    position: fixed;
-    bottom: 20px; /* Afaka ovaina raha mila avo kokoa na ambany kokoa */
-    left: 20px; /* Apetraka eo amin'ny sisiny gauche */
-    width: 50px;
-    height: 50px;
-    background-color: #007bff; /* Loko manga */
-    color: white;
-    font-size: 24px;
-    text-align: center;
-    line-height: 50px;
-    border-radius: 50%;
-    text-decoration: none;
-    box-shadow: 2px 2px 10px rgba(0, 0, 0, 0.2);
-    transition: transform 0.3s ease, background-color 0.3s ease;
-}
+<p>  
+  Ity indray site vaovao, nivoaka amin'ity taona <strong>2025</strong> ity.  
+</p>  
 
-.service-client-btn:hover {
-    background-color: #0056b3; /* Manga maizina kokoa rehefa hover */
-    transform: scale(1.1); /* Manitatra kely rehefa ampifantarina */
-}
- </style >
-    </div>
-    
-    <div id="gratuit" class="content">
+<p>  
+  Izahay dia manome <strong>garantie</strong> ho an'ny mpanaraka anay fa maharitra <strong>10 mois</strong> ity site ity.  
+</p>  
+
+<p>  
+  Hararaoty foana rehefa misy zavatra vaovao mivoaka toy izao, aza miandry efa <strong>7 mois</strong> nivoahany izay vao hanomboka hanao an'ilay izy.  
+</p>  
+
+<p>  
+  Izao no fotoana izay afahanao manomboka sady mbola tsy misy <strong>risque de perte</strong> mihitsy, raha izao ianao no hanomboka hanao an'ilay izy.  
+</p>  
+
+<p>  
+  Harao eto ambany ny <strong>plan d'investissement</strong>.  
+</p>  
+
+<p>  
+  <strong>📌 PLAN D'INVESTISSEMENT</strong><br>  
+  👉 Dépôt <strong>10$~29$</strong> ⏭️ gains <strong>1.8%</strong>. Mahazo <strong>2 tâche</strong> par jours.<br>  
+  👉 Dépôt <strong>30$~499$</strong> ⏭️ gains <strong>2%</strong>. Mahazo <strong>4 tâche</strong> par jours.<br>  
+  👉 Dépôt <strong>plus 500$</strong> ⏭️ gains <strong>3.3%</strong>. Mahazo <strong>5 tâche</strong> par jours.  
+</p>
+<h3 style="color:white; border:1px solid black; background-color:black; border-radius:15px; text-align:center;">
+    TUTORIEL D'INSCRIPTION GDQ WEB3
+</h3>
+<iframe width="320" height="320" 
+    src="https://www.youtube.com/embed/L4IaJHj71Ec" 
+    frameborder="0" allowfullscreen style="border-radius: 5px;">
+</iframe>
+
+<h3 style="color:white; border:1px solid black; background-color:black; border-radius:15px; text-align:center;">
+    TUTORIEL DU DEPOT GDQ WEB3
+</h3>
+<iframe width="320" height="320" 
+    src="https://www.youtube.com/embed/4zvlelfsRNQ" 
+    frameborder="0" allowfullscreen>
+</iframe>
+
+<h3 style="color:white; border:1px solid black; background-color:black; border-radius:15px; text-align:center;">
+    TUTORIEL DU RETRAIT GDQ WEB3
+</h3>
+<iframe width="320" height="320" 
+    src="https://www.youtube.com/embed/iVBlzIWj0Do" 
+    frameborder="0" allowfullscreen>
+</iframe>
+<a href="https://gdqai.com/#/register?i=711456">s'inscrir / hisoratra anarana </a>
+
+<h2 style ="color :blue ;text -align : center ;">CAPITAL FINANCE </h2>
+    <center ><p><br><br> 
+<p>  
+  💶<strong>CAPITAL FINANCE</strong>💶  
+</p>  
+
+<p>  
+  <strong>Capital Finance</strong> dia site nivoaka tamin'ny taona <strong>2017</strong>, manolotra fomba fidiram-bola amin'ny alalan'ny fametrahana vola amin'ny rafitra manokana. Izy io dia anisan'ny toerana fanta-daza indrindra amin'ny fidiram-bola ao amin'ny sehatra ara-bola.  
+</p>  
+
+<p>  
+  Raha te hahazo vola amin'izany, dia azonao atao ny manaraka ireo <strong>plan</strong> azo isafidianana:  
+</p>  
+
+<p>  
+  <strong>📌 Plan 1:</strong><br>  
+  - <strong>Dépôt:</strong> 5$~500$<br>  
+  - <strong>Gains:</strong> 120%<br>  
+  - <strong>Contrat:</strong> 90 jours na 3 mois<br>  
+  - <strong>Gains par mois:</strong> 40%  
+</p>  
+
+<p>  
+  <strong>📌 Plan 2:</strong><br>  
+  - <strong>Dépôt:</strong> 50$~5000$<br>  
+  - <strong>Gains total:</strong> 130%<br>  
+  - <strong>Gains par mois:</strong> 43.33%<br>  
+  - <strong>Contrat:</strong> 3 mois  
+</p>  
+
+<p>  
+  <strong>📌 Plan 3:</strong><br>  
+  - <strong>Dépôt:</strong> 100$~10.000$<br>  
+  - <strong>Gains total:</strong> 140%<br>  
+  - <strong>Gains par mois:</strong> 46.66%<br>  
+  - <strong>Contrat:</strong> 3 mois  
+</p>
+
+<a href="https://my-capitalfinance.net/signup.php?refer=Valerida&ral=23874">S'inscrir / hisoratra anarana </a>
+      </div>
+      
+      <div id="asaGratuit" class="home-section">
+        <h2>Asa Gratuit</h2>
+        <p>Azonao atao ny manaraka ny fampianarana Asa en ligne Mada Gratuit ato amin'ny pejy ity. Araho eto ambany izany </p>
         
-        <h2 style="color: #8B4513; font-size: 26px; margin-bottom: 20px;">📢 SITE GRATUIT MAHARITRA 🌍</h2> 
-   <h2>IPWEB – Fomba Tsotra Ahazoana Vola Amin’ny Internet  </h2>
+        <h2 style ="color :blue ;text -align : center ;">MICRO TACHE </h2>
+    <center ><p><br><br>
+    <p>Mba afahanao manaraka ny fampianarana dia Araho eto ambany ny video fanazavana ny maksika ny microtache. </p> <br>
+    
+   <p style="font-size: 18px; line-height: 1.6; color: #333; text-align: justify;">
+   Ny <strong>MICROTACHE.COM</strong >  dia sehatra azo anankinana izay manome fahafahana hahazo vola amin’ny alalan’ny asa tsotra atao amin’ny internet. Ao amin’ny MICROTACHE.COM, azonao atao ny mamita tache maro samihafa toy ny mijery dokam-barotra, misoratra anarana amin’ny site sasany, ary manao asa tsotra hafa, ka mahazo vola amin’izany. Ny tombony dia tsy misy fepetra sarotra, ary afaka manomboka amin’ny kely dia kely.  
+
+
+      
+        <h2>VIDEO 1 :<br><br >
+        
+        FAMPIANARANA MANAO INSCRIPTION MICROTACHE</h2>
+        <iframe src="https://www.youtube.com/embed/VoyrLGL5mpk" allowfullscreen></iframe>
+   
+
+    
+        <h2>Video 2:<br><br >
+        
+        FAMPIANARANA MANAO ASA @ MICROTACHE</h2>
+        <iframe src="https://www.youtube.com/embed/gv5YN7IboMk" allowfullscreen></iframe>  <br><br>
+         
+         <h2 style ="color :blue ;text -align : center ;">FREE BNB </h2>
+    <center ><p><br>
+         Amin’ny BNBFREE.IN kosa, azo atao ny mahazo <strong>BNB</strong> amin’ny fomba mora sy mahomby. Raha manaraka ny stratégie marina ianao, dia afaka mahazo <strong>minimum retrait par mois</strong> amin’ny fotoana fohy. Hisy fizarana manokana momba ny stratégie hanampy anao hahazo vokatra tsara indrindra amin’ity sehatra ity.  
+
+      <h2>VIDEO1: FAMPIANARANA MANAO INSCRIPTION SY NY ASA ATAO @ BNBFREE</h2>
+        <iframe src="https://www.youtube.com/embed/TfmjKfRUxdM" allowfullscreen></iframe>
+        <p>Eo ampiandrasana ny fizarana strategy bnb izay azahoana minimum retrait par mois isika izao, manana faharetana kely tompoko.... </p>  
+        
+        <h2 style ="color :blue ;text -align : center ;">IPWEB MICROTACH </h2>
+    <center ><p><br>
+    
+     <h2>IPWEB – Fomba Tsotra Ahazoana Vola Amin’ny Internet  </h2>
 
 <p style="  
     background-color: #D2691E;  
@@ -809,613 +462,286 @@ Mba hisoratra anarana, tsindrio eto: <a href="https://www.metaegg.gg/#/pages/pub
 ">S'inscrire</a>  <br ><br >
 <a href="https://m.me/j/AbbjX0YBmpokejn8/">Rejoindre le groupe IPWEB </a><br ><br ><br ><br ><br ><br ><br ><br >
 </center>
-<a href="https://bot-site-web-asa-en-ligne-mada.vercel.app/" class="service-client-btn" target="_blank">
-    💬
-</a>
-<!--  -->
-<style >.service-client-btn {
-    position: fixed;
-    bottom: 20px; /* Afaka ovaina raha mila avo kokoa na ambany kokoa */
-    left: 20px; /* Apetraka eo amin'ny sisiny gauche */
-    width: 50px;
-    height: 50px;
-    background-color: #007bff; /* Loko manga */
-    color: white;
-    font-size: 24px;
-    text-align: center;
-    line-height: 50px;
-    border-radius: 50%;
-    text-decoration: none;
-    box-shadow: 2px 2px 10px rgba(0, 0, 0, 0.2);
-    transition: transform 0.3s ease, background-color 0.3s ease;
-}
 
-.service-client-btn:hover {
-    background-color: #0056b3; /* Manga maizina kokoa rehefa hover */
-    transform: scale(1.1); /* Manitatra kely rehefa ampifantarina */
-}
- </style >
-
-       <!--  -->        
-       <a href="https://wa.me/261323911654" class="whatsapp-btn" target="_blank">
-    <img src="https://upload.wikimedia.org/wikipedia/commons/6/6b/WhatsApp.svg" alt="WhatsApp" class="whatsapp-icon">
-</a>
-<!-- service client -->
-<style >
-.whatsapp-btn {
-    position: fixed;
-    top: 50%; /* Apetraka anivo */
-    right: 20px; /* Apetraka eo amin'ny sisiny droit */
-    width: 60px;
-    height: 60px;
-    background-color: #25D366; /* Loko WhatsApp */
-    border-radius: 50%;
-    text-decoration: none;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    box-shadow: 2px 2px 10px rgba(0, 0, 0, 0.2);
-    transition: transform 0.3s ease, background-color 0.3s ease;
-}
-
-.whatsapp-btn:hover {
-    background-color: #1EBE5D; /* Loko maizina kokoa rehefa hover */
-    transform: scale(1.1); /* Manitatra kely rehefa ampifantarina */
-}
-
-.whatsapp-icon {
-    width: 35px; /* Habe amin'ny sary */
-    height: 35px;
-}
- </style >
+<p>Eo ampiandrasana ny fandatashana video fampianarana IPWEB feno eto aminy site isika izao, azonao atao manao rejoindre le group amizao manadrapahandatsahana ny tuto video eto aminy site, manana faharetana.... </p>
+      </div>
+      <div id="formationTrading" class="home-section">
+        <h2>Formation Trading</h2>
+        <p>Tongasoa eto amin'ny fianarana trading bot ianao. Raha mbola tsy nahazo robot Gratuit izay hoentianao ampiasaina ianao dia mifandraisa @ service clients Maka izany. Ireto ambany ireto ny video vitsivitsy fampianarana ny debutant araho tsara izany </p>
         
-        <p style="font-size: 18px; line-height: 1.6; color: #333; text-align: justify;">
-   Ny <strong>MICROTACHE.COM</strong> sy <strong>BNBFREE.IN</strong> dia sehatra azo anankinana izay manome fahafahana hahazo vola amin’ny alalan’ny asa tsotra atao amin’ny internet. Ao amin’ny MICROTACHE.COM, azonao atao ny mamita tache maro samihafa toy ny mijery dokam-barotra, misoratra anarana amin’ny site sasany, ary manao asa tsotra hafa, ka mahazo vola amin’izany. Ny tombony dia tsy misy fepetra sarotra, ary afaka manomboka amin’ny kely dia kely.  
+   
+        <h2 style ="color :blue ;text -align : center ;">TUTORIAL DERIV BOT </h2>
+    <center ><p><br>>
 
-   Amin’ny BNBFREE.IN kosa, azo atao ny mahazo <strong>BNB</strong> amin’ny fomba mora sy mahomby. Raha manaraka ny stratégie marina ianao, dia afaka mahazo <strong>minimum retrait par mois</strong> amin’ny fotoana fohy. Hisy fizarana manokana momba ny stratégie hanampy anao hahazo vokatra tsara indrindra amin’ity sehatra ity.  
-
-   Raha te hijery video fanazavana amin’ny antsipiriany mikasika izany, tsindrio eto:  
-   <a href="https://microtache.vercel.app/" target="_blank" style="color: blue; text-decoration: underline; font-weight: bold;">Mijery Video</a>
-        </p>               
-
-    
-
-    
-<!DOCTYPE html>
-<html lang="fr">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Vidéos</title>
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-            background-color: #f4f4f4;
-            text-align: center;
-            padding: 20px;
-        }
-
-        h2 {
-            color: #333;
-            background-color: #007bff;
-            padding: 10px;
-            border-radius: 5px;
-            display: inline-block;
-            color: white;
-        }
-
-        .video-container {
-            background: white;
-            padding: 15px;
-            margin: 20px auto;
-            border-radius: 10px;
-            box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.2);
-            width: 80%;
-            max-width: 700px;
-        }
-
-        iframe {
-            width: 100%;
-            height: 350px;
-            border-radius: 10px;
-            border: none;
-        }
-
-    </style>
-</head>
-<body>
-
-    <div class="video-container">
-        <h2>VIDEO1: FAMPIANARANA MANAO INSCRIPTION SY NY ASA ATAO @ BNBFREE</h2>
-        <iframe src="https://www.youtube.com/embed/TfmjKfRUxdM" allowfullscreen></iframe>
-    </div>
-
-    <div class="video-container">
-        <h2>VIDEO2:<br><br >
-        
-        FAMPIANARANA MANAO INSCRIPTION MICROTACHE</h2>
-        <iframe src="https://www.youtube.com/embed/VoyrLGL5mpk" allowfullscreen></iframe>
-    </div>
-
-    <div class="video-container">
-        <h2>VIDEO:3<br><br >
-        
-        FAMPIANARANA MANAO ASA @ MICROTACHE</h2>
-        <iframe src="https://www.youtube.com/embed/gv5YN7IboMk" allowfullscreen></iframe>
-    </div>
-
-</body>
-</html>
-</div>
-
-
-
-    <!DOCTYPE html>
-<html lang="mg">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Deriv Bot Tutorials</title>
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-            background-color: #f4f4f4;
-            margin: 0;
-            padding: 20px;
-            text-align: center;
-        }
-        .container {
-            max-width: 800px;
-            margin: auto;
-            background: white;
-            padding: 20px;
-            box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
-            border-radius: 8px;
-        }
-        h2 {
-            color: #333;
-        }
-        .video-card {
-            background: #fff;
-            padding: 15px;
-            margin: 15px 0;
-            border-radius: 8px;
-            box-shadow: 0px 0px 8px rgba(0, 0, 0, 0.1);
-            text-align: center;
-        }
-        iframe {
-            width: 100%;
-            height: 315px;
-            border-radius: 8px;
-        }
-        .download-btn {
-            display: inline-block;
-            margin-top: 10px;
-            padding: 10px 15px;
-            background: #007BFF;
-            color: white;
-            text-decoration: none;
-            border-radius: 5px;
-            font-weight: bold;
-        }
-        .download-btn:hover {
-            background: #0056b3;
-        }
-    </style>
-</head>
-<body>
-
-    <div class="container">
-        <h2>Tutorials Deriv Bot</h2>
-
-        <div class="video-card">
+       
             <h3>Fanaovana INSCRIPTION amin'ny Deriv Bot</h3>
             <iframe src="https://www.youtube.com/embed/xI7xLAdDplY" allowfullscreen></iframe>
             <a class="download-btn" href="https://ssyoutube.com/watch?v=xI7xLAdDplY" target="_blank">
                 Telecharger Video
             </a>
-        </div>
+        
 
-        <div class="video-card">
+        
             <h3>Fanofakana reel amin'ny Deriv Bot</h3>
             <iframe src="https://www.youtube.com/embed/j8AzNscKVpY" allowfullscreen></iframe>
             <a class="download-btn" href="https://ssyoutube.com/watch?v=j8AzNscKVpY" target="_blank">
                 Telecharger Video
             </a>
-        </div>
+        
 
-        <div class="video-card">
+        
             <h3>Fampidirana Robot sy Fampiasana azy</h3>
             <iframe src="https://www.youtube.com/embed/Yd3gW_QXv2s" allowfullscreen></iframe>
             <a class="download-btn" href="https://ssyoutube.com/watch?v=Yd3gW_QXv2s" target="_blank">
                 Telecharger Video
             </a>
-        </div>
+        
 
-        <div class="video-card">
+        
             <h3>Fanaovana Dépôt amin'ny Deriv Bot</h3>
             <iframe src="https://www.youtube.com/embed/3S4bGGMhuSk" allowfullscreen></iframe>
             <a class="download-btn" href="https://ssyoutube.com/watch?v=3S4bGGMhuSk" target="_blank">
                 Telecharger Video
-            </a>
-        </div>
-
+            </a>     
+      </div>
+      <div id="transaction" class="home-section">
+        <h2>Transaction</h2>
+        <p>Rehefa hanao retrait na depot amin'ny site iray ianao dia eto ihany no mahavita izany. Fa amizao mbola andalana fametrahana ny section Commercent eto isaka, manana faharetana .</p>
+      </div>
     </div>
-
-</body>
-</html>
-
-    
-    <div id="formation" class="content">
-        
-        
-        
-        <h2 style="color: #8B4513; font-size: 26px; margin-bottom: 20px;">📢 FORMATION HTML, CSS, JAVASCRIPT 🌍</h2><br ><br >
-                     <h1 sstyle ="color :white ;border :5px double yellow ; border-radius : 60px; background-color :blue ; text-align :center ;">  Fampianarana HTML, CSS ary JavaScript  </h1><br >
-
-<p style ="color :white ;border :5px double yellow ; border-radius : 60px; background-color :blue ; text-align :center ;">  
-Miarahaba anao! Raha te hianatra ny famoronana tranonkala matihanina ianao, dia ity fampianarana ity no mety aminao. Hanampy anao hahazo fahatakarana lalina momba ny HTML, CSS ary JavaScript izahay, izay fiteny fototra amin’ny fanaovana tranonkala.   
-
-Ny fizarana HTML sy CSS dia maimaim-poana, ahafahanao mianatra mamorona pejy web tsara tarehy sy voalamina tsara. Raha te handroso lavidavitra amin’ny fampandrosoana web ianao, dia afaka mianatra JavaScript koa. Ity dia misy sarany 30.000 Ar, ary ahafahanao mianatra mampiditra fiasa manan-tsaina amin’ny tranonkalanao.  
-</p> 
-
-<div style="text-align: center; margin-top: 20px;">  
-    <a href="https://web-site-asa-en-ligne-m-da-formation-gratuit.vercel.app/" style="background-color: #007bff; color: #fff; padding: 10px 20px; text-decoration: none; border-radius: 5px; font-size: 16px; display: inline-block; margin-right: 10px;">  
-        COMMENCER À GRATUITEMENT  
-    </a>  
-    <a href="https://service-client-site-web-asa-en-ligne-m-da-amber.vercel.app/" style="background-color: #28a745; color: #fff; padding: 10px 20px; text-decoration: none; border-radius: 5px; font-size: 16px; display: inline-block;">  
-        COMMENCER APPRENDRE JAVASCRIPT  
-    </a>  
-</div><br ><br >
-</center>
-<a href="https://bot-site-web-asa-en-ligne-mada.vercel.app/" class="service-client-btn" target="_blank">
-    💬
-</a>
-<!--  -->
-<style >.service-client-btn {
-    position: fixed;
-    bottom: 20px; /* Afaka ovaina raha mila avo kokoa na ambany kokoa */
-    left: 20px; /* Apetraka eo amin'ny sisiny gauche */
-    width: 50px;
-    height: 50px;
-    background-color: #007bff; /* Loko manga */
-    color: white;
-    font-size: 24px;
-    text-align: center;
-    line-height: 50px;
-    border-radius: 50%;
-    text-decoration: none;
-    box-shadow: 2px 2px 10px rgba(0, 0, 0, 0.2);
-    transition: transform 0.3s ease, background-color 0.3s ease;
-}
-
-.service-client-btn:hover {
-    background-color: #0056b3; /* Manga maizina kokoa rehefa hover */
-    transform: scale(1.1); /* Manitatra kely rehefa ampifantarina */
-}
- </style >
-
-          <a href="https://wa.me/261323911654" class="whatsapp-btn" target="_blank">
-    <img src="https://upload.wikimedia.org/wikipedia/commons/6/6b/WhatsApp.svg" alt="WhatsApp" class="whatsapp-icon">
-</a>
-<!-- service client -->
-<style >
-.whatsapp-btn {
-    position: fixed;
-    top: 50%; /* Apetraka anivo */
-    right: 20px; /* Apetraka eo amin'ny sisiny droit */
-    width: 60px;
-    height: 60px;
-    background-color: #25D366; /* Loko WhatsApp */
-    border-radius: 50%;
-    text-decoration: none;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    box-shadow: 2px 2px 10px rgba(0, 0, 0, 0.2);
-    transition: transform 0.3s ease, background-color 0.3s ease;
-}
-
-.whatsapp-btn:hover {
-    background-color: #1EBE5D; /* Loko maizina kokoa rehefa hover */
-    transform: scale(1.1); /* Manitatra kely rehefa ampifantarina */
-}
-
-.whatsapp-icon {
-    width: 35px; /* Habe amin'ny sary */
-    height: 35px;
-}
- </style >
-             
-                       
-    </div>
-    
-    <div id="depot" class="content">
-        
-        <h2 style="color: #8B4513; font-size: 26px; margin-bottom: 20px;">📢 MANAOVA DEPOT AMIN'NY SITE NA PORTEFEUILLE ÉLECTRONIQUE ETO AMINAY  🌍</h2> <br ><br >
-                        <h1 style ="color :white ;border :5px double yellow ; border-radius : 6px; background-color :blue ; text-align :center ;">Fanaovana Échange sy Dépôt amin’ny Site na amin’ny Portefeuille Électronique</h1> <br >
-
-<p style ="color :white ;border :5px double yellow ; border-radius : 20px; background-color :orange ; text-align :center ;">  
-Manome tolotra fanaovana échange sy dépôt haingana sy azo antoka izahay, na amin’ny alalan’ny tranokalanay na amin’ny portefeuille électronique. Afaka mametraka vola amin’ny devises maro ianao, ary miantoka fahatomombanana sy haingana amin’ny fifanakalozana izahay. Raha mila manao dépôt dia azonao atao izany amin’ny fomba tsotra sy mora amin’ny alalan’ny rohy etsy ambany.  
-</p>  
-
-<div style="text-align: center; margin-top: 20px;">  
-    <a href="https://depot-eto-mn-ny-asa-en-ligne.vercel.app/" style="background-color: #007bff; color: #fff; padding: 10px 20px; text-decoration: none; border-radius: 5px; font-size: 16px; display: inline-block;">  
-        DEPOT  
-    </a>  
-</div>
-<a href="https://bot-site-web-asa-en-ligne-mada.vercel.app/" class="service-client-btn" target="_blank">
-    💬
-</a>
-
-<!--  -->
-<style >.service-client-btn {
-    position: fixed;
-    bottom: 20px; /* Afaka ovaina raha mila avo kokoa na ambany kokoa */
-    left: 20px; /* Apetraka eo amin'ny sisiny gauche */
-    width: 50px;
-    height: 50px;
-    background-color: #007bff; /* Loko manga */
-    color: white;
-    font-size: 24px;
-    text-align: center;
-    line-height: 50px;
-    border-radius: 50%;
-    text-decoration: none;
-    box-shadow: 2px 2px 10px rgba(0, 0, 0, 0.2);
-    transition: transform 0.3s ease, background-color 0.3s ease;
-}
-
-.service-client-btn:hover {
-    background-color: #0056b3; /* Manga maizina kokoa rehefa hover */
-    transform: scale(1.1); /* Manitatra kely rehefa ampifantarina */
-}
- </style >
-
-     <a href="https://wa.me/261323911654" class="whatsapp-btn" target="_blank">
-    <img src="https://upload.wikimedia.org/wikipedia/commons/6/6b/WhatsApp.svg" alt="WhatsApp" class="whatsapp-icon">
-</a>
-<!-- service client -->
-<style >
-.whatsapp-btn {
-    position: fixed;
-    top: 50%; /* Apetraka anivo */
-    right: 20px; /* Apetraka eo amin'ny sisiny droit */
-    width: 60px;
-    height: 60px;
-    background-color: #25D366; /* Loko WhatsApp */
-    border-radius: 50%;
-    text-decoration: none;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    box-shadow: 2px 2px 10px rgba(0, 0, 0, 0.2);
-    transition: transform 0.3s ease, background-color 0.3s ease;
-}
-
-.whatsapp-btn:hover {
-    background-color: #1EBE5D; /* Loko maizina kokoa rehefa hover */
-    transform: scale(1.1); /* Manitatra kely rehefa ampifantarina */
-}
-
-.whatsapp-icon {
-    width: 35px; /* Habe amin'ny sary */
-    height: 35px;
-}
- </style >
-    </div>
-    
-    <div id="retrait" class="content">
-        
-        
-        <h2 style="color: #8B4513; font-size: 26px; margin-bottom: 20px;">📢 MANAOVA RETRAIT VOLA AVY AMIN'NY MANKANY AMIN'NY MOBILE MONEY ETO AMINAY 🌍</h2> <br ><br >
-                        
-                        <h1 style ="color :white ;border :5px double yellow ; border-radius : 5px; background-color :orange ; text-align :center ;">Fanaovana Échange sy Retrait amin’ny Site na amin’ny Portefeuille Électronique</h1>  <br >
-
-<p style ="color :white ;border :5px double yellow ; border-radius : 20px; background-color :blue ; text-align :center ;">  
-Manome tolotra fanaovana échange sy retrait haingana sy azo antoka izahay, na amin’ny alalan’ny tranokalanay na amin’ny portefeuille électronique. Azonao atao ny manala ny volanao amin’ny fomba tsotra sy haingana, ary miantoka ny fahatomombanana amin’ny fifanakalozana izahay. Raha te hanao retrait, dia azonao atao amin’ny alalan’ny rohy etsy ambany.  
-</p>  
-
-<div style="text-align: center; margin-top: 20px;">  
-    <a href="https://retrait-site-web-asa-en-ligne-mada.vercel.app/" style="background-color: #dc3545; color: #fff; padding: 10px 20px; text-decoration: none; border-radius: 5px; font-size: 16px; display: inline-block;">  
-        RETRAIT  
-    </a>  
-</div>
-</section > 
-
-
-<a href="https://bot-site-web-asa-en-ligne-mada.vercel.app/" class="service-client-btn" target="_blank">
-    💬
-</a>
-
-<!--  -->
-<style >
-.service-client-btn {
-    position: fixed;
-    bottom: 20px; /* Afaka ovaina raha mila avo kokoa na ambany kokoa */
-    left: 20px; /* Apetraka eo amin'ny sisiny gauche */
-    width: 50px;
-    height: 50px;
-    background-color: #007bff; /* Loko manga */
-    color: white;
-    font-size: 24px;
-    text-align: center;
-    line-height: 50px;
-    border-radius: 50%;
-    text-decoration: none;
-    box-shadow: 2px 2px 10px rgba(0, 0, 0, 0.2);
-    transition: transform 0.3s ease, background-color 0.3s ease;
-}
-
-.service-client-btn:hover {
-    background-color: #0056b3; /* Manga maizina kokoa rehefa hover */
-    transform: scale(1.1); /* Manitatra kely rehefa ampifantarina */
-}
-</style >
-
-<a href="https://wa.me/261323911654" class="whatsapp-btn" target="_blank">
-    <img src="https://upload.wikimedia.org/wikipedia/commons/6/6b/WhatsApp.svg" alt="WhatsApp" class="whatsapp-icon">
-</a>
-<!-- service client -->
-<style >
-.whatsapp-btn {
-    position: fixed;
-    top: 50%; /* Apetraka anivo */
-    right: 20px; /* Apetraka eo amin'ny sisiny droit */
-    width: 60px;
-    height: 60px;
-    background-color: #25D366; /* Loko WhatsApp */
-    border-radius: 50%;
-    text-decoration: none;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    box-shadow: 2px 2px 10px rgba(0, 0, 0, 0.2);
-    transition: transform 0.3s ease, background-color 0.3s ease;
-}
-
-.whatsapp-btn:hover {
-    background-color: #1EBE5D; /* Loko maizina kokoa rehefa hover */
-    transform: scale(1.1); /* Manitatra kely rehefa ampifantarina */
-}
-
-.whatsapp-icon {
-    width: 35px; /* Habe amin'ny sary */
-    height: 35px;
-}
- </style >
-
-                    
-    </div>
-    
-    <footer class="footer">
-    <p>Asa en ligne 2025-2026</p>
-</footer>
-
-
-    <script>
-        function showContent(sectionId) {
-            // Manafina ireo sections rehetra
-            var sections = document.getElementsByClassName("content");
-            for (var i = 0; i < sections.length; i++) {
-                sections[i].style.display = "none";
-            }
-
-            // Mampiseho ilay section voafidy
-            document.getElementById(sectionId).style.display = "block";
-        }
-    </script>
-    
-    <script>
-        function fermerAnnonce() {
-            document.getElementById("annonce").style.display = "none";
-        }
-    </script>
-
-</body>
-</html>
-
-
-
-
-
-<!DOCTYPE html>
-<html lang="mg">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Annonce - Groupe de Discussion Asa En Ligne Mäda</title>
-  <style>
-    body, html {
-      margin: 0;
-      padding: 0;
-      font-family: Arial, sans-serif;
-      background: #f0f0f0;
-    }
-    .announcement-container {
-      position: relative;
-      max-width: 600px;
-      margin: 50px auto;
-      background: #fff;
-      border-radius: 10px;
-      padding: 30px;
-      box-shadow: 0 2px 10px rgba(0,0,0,0.2);
-      text-align: center;
-    }
-    .close-btn {
-      position: absolute;
-      top: 10px;
-      right: 10px;
-      background-color: #dc3545;
-      color: #fff;
-      border: none;
-      border-radius: 50%;
-      width: 30px;
-      height: 30px;
-      cursor: pointer;
-      font-size: 16px;
-      line-height: 30px;
-    }
-    .announcement-title {
-      font-size: 26px;
-      font-weight: bold;
-      color: #333;
-      margin-bottom: 20px;
-    }
-    .announcement-text {
-      font-size: 18px;
-      color: #555;
-      margin-bottom: 30px;
-      line-height: 1.5;
-    }
-    .images-container {
-      display: flex;
-      justify-content: center;
-      gap: 15px;
-      margin-bottom: 30px;
-    }
-    .images-container img {
-      width: 80px;
-      height: 80px;
-    }
-    .join-button {
-      display: inline-block;
-      padding: 15px 25px;
-      background-color: #28a745;
-      color: #fff;
-      text-decoration: none;
-      border-radius: 5px;
-      font-size: 18px;
-      transition: background 0.3s;
-    }
-    .join-button:hover {
-      background-color: #218838;
-    }
-  </style>
-</head>
-<body>
-  <div class="announcement-container" id="announcement">
-    <button class="close-btn" onclick="closeAnnouncement()">×</button>
-    <div class="images-container">
-      <img src="https://img.icons8.com/doodle/80/000000/user-male.png" alt="Mpiara-miasa 1">
-      <img src="https://img.icons8.com/doodle/80/000000/user-female.png" alt="Mpiara-miasa 2">
-      <img src="https://img.icons8.com/doodle/80/000000/user.png" alt="Mpiara-miasa 3">
-    </div>
-    <div class="announcement-title">
-      Misokatra ny Groupe de Discussion Asa En Ligne Mäda!
-    </div>
-    <div class="announcement-text">
-      Tongava ho ao amin'ny vondrona mba hahazoanao vaovao, torohevitra sy fanampiana manokana mikasika ny asa. 
-      Anisan'ny fianakavianay ianao rehefa miditra; hiara-hiasa isika, hizara traikefa sy hitombo miaraka!
-    </div>
-    <a href="https://groupe-de-discussion-asa-en-ligne-m-da.vercel.app/" class="join-button" target="_blank">
-      Midira Eto
-    </a>
   </div>
-  <script>
-    function closeAnnouncement() {
-      document.getElementById('announcement').style.display = 'none';
-    }
+
+  <!-- Firebase + App JS -->
+  <script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/11.3.1/firebase-app.js";
+    import {
+      getAuth,
+      createUserWithEmailAndPassword,
+      signInWithEmailAndPassword,
+      sendPasswordResetEmail
+    } from "https://www.gstatic.com/firebasejs/11.3.1/firebase-auth.js";
+    import {
+      getFirestore,
+      doc,
+      setDoc,
+      getDoc,
+      updateDoc,
+      addDoc,
+      collection
+    } from "https://www.gstatic.com/firebasejs/11.3.1/firebase-firestore.js";
+
+    // Configuration Firebase
+    const firebaseConfig = {
+      apiKey: "AIzaSyCK4HqGSjYRT2jFNhAvniSWIzhDvEb2qAQ",
+      authDomain: "asa-en-ligne.firebaseapp.com",
+      projectId: "asa-en-ligne",
+      storageBucket: "asa-en-ligne.appspot.com",
+      messagingSenderId: "58359363245",
+      appId: "1:58359363245:web:ca5969776ce9cd86aef824",
+      measurementId: "G-MRVHVWPV71"
+    };
+
+    const app = initializeApp(firebaseConfig);
+    const auth = getAuth(app);
+    const db = getFirestore(app);
+
+    // Global variable ho an'ny hafatra admin
+    let storedAdminMessage = "";
+
+    // ----- Inscription -----
+    window.registerUser = function() {
+      const fullName = document.getElementById("full-name").value.trim();
+      const email = document.getElementById("reg-email").value.trim();
+      const password = document.getElementById("reg-password").value;
+      const confirmPassword = document.getElementById("reg-confirm-password").value;
+      if(password !== confirmPassword) {
+        alert("Les mots de passe ne correspondent pas.");
+        return;
+      }
+      createUserWithEmailAndPassword(auth, email, password)
+        .then((userCredential) => {
+          const user = userCredential.user;
+          // Enregistrer l'utilisateur sans code d'activation tant que paiement non effectué
+          setDoc(doc(db, "users", user.uid), {
+            fullName: fullName,
+            email: email,
+            paymentStatus: "not_paid",
+            createdAt: new Date()
+          })
+          .then(() => {
+            alert("Inscription réussie. Veuillez effectuer le paiement pour recevoir un code d'activation.");
+            showLoginSection();
+          })
+          .catch((error) => alert("Erreur lors de l'enregistrement : " + error.message));
+        })
+        .catch((error) => alert("Erreur : " + error.message));
+    };
+
+    // ----- Affichage des sections -----
+    window.showRegistrationSection = function() {
+      document.getElementById("registration-section").classList.remove("hidden");
+      document.getElementById("login-section").classList.add("hidden");
+      document.getElementById("final-activation-form").classList.add("hidden");
+      document.getElementById("activation-notification").classList.add("hidden");
+      document.getElementById("payment-instructions").classList.add("hidden");
+      document.getElementById("payment-proof").classList.add("hidden");
+      document.getElementById("pending-verification").classList.add("hidden");
+      document.getElementById("homepage").classList.add("hidden");
+    };
+
+    window.showLoginSection = function() {
+      document.getElementById("registration-section").classList.add("hidden");
+      document.getElementById("login-section").classList.remove("hidden");
+      document.getElementById("final-activation-form").classList.add("hidden");
+      document.getElementById("activation-notification").classList.add("hidden");
+      document.getElementById("payment-instructions").classList.add("hidden");
+      document.getElementById("payment-proof").classList.add("hidden");
+      document.getElementById("pending-verification").classList.add("hidden");
+      document.getElementById("homepage").classList.add("hidden");
+    };
+
+    // ----- Connexion initiale -----
+    window.loginUser = function() {
+      const email = document.getElementById("login-email").value.trim();
+      const password = document.getElementById("login-password").value;
+      signInWithEmailAndPassword(auth, email, password)
+        .then(async (userCredential) => {
+          const user = userCredential.user;
+          const userDoc = await getDoc(doc(db, "users", user.uid));
+          if(userDoc.exists()){
+            const userData = userDoc.data();
+            if(userData.paymentStatus === "confirmed") {
+              // Afficher activation-notification avec code d'activation et notification admin éventuelle
+              document.getElementById("activation-notification").classList.remove("hidden");
+              document.getElementById("activation-code-container").innerHTML = 
+                "Voici votre nouveau code d'activation : <strong id='user-activation-code'>" + userData.activationCode + "</strong>";
+              if(userData.adminMessage) {
+                storedAdminMessage = userData.adminMessage;
+                document.getElementById("admin-notification-text").innerText = "Vous avez un message de l'admin.";
+                document.getElementById("admin-notification").classList.remove("hidden");
+              } else {
+                document.getElementById("admin-notification").classList.add("hidden");
+              }
+            } else if(userData.paymentStatus === "pending") {
+              document.getElementById("pending-verification").classList.remove("hidden");
+            } else {
+              document.getElementById("payment-instructions").classList.remove("hidden");
+            }
+          } else {
+            alert("Aucune donnée utilisateur trouvée.");
+          }
+        })
+        .catch(error => alert("Erreur : " + error.message));
+    };
+
+    window.resetPassword = function() {
+      const email = document.getElementById("login-email").value.trim();
+      if(!email) {
+        alert("Veuillez entrer votre adresse e-mail.");
+        return;
+      }
+      sendPasswordResetEmail(auth, email)
+        .then(() => alert("Email de réinitialisation envoyé !"))
+        .catch((error) => alert("Erreur : " + error.message));
+    };
+
+    // ----- Preuve de paiement -----
+    window.showPaymentProofForm = function() {
+      document.getElementById("payment-instructions").classList.add("hidden");
+      document.getElementById("payment-proof").classList.remove("hidden");
+    };
+
+    window.submitPaymentProof = async function() {
+      const proofFullName = document.getElementById("proof-fullname").value.trim();
+      const proofPhone = document.getElementById("proof-phone").value.trim();
+      const proofAmount = document.getElementById("proof-amount").value.trim();
+      if(!proofFullName || !proofPhone || !proofAmount) {
+        alert("Veuillez remplir tous les champs.");
+        return;
+      }
+      try {
+        await addDoc(collection(db, "paymentRequests"), {
+          userId: auth.currentUser.uid,
+          fullName: proofFullName,
+          phone: proofPhone,
+          amount: proofAmount,
+          timestamp: new Date().toISOString(),
+          status: "pending"
+        });
+        await updateDoc(doc(db, "users", auth.currentUser.uid), {
+          paymentStatus: "pending"
+        });
+        alert("Votre demande de paiement a été envoyée et est en attente de vérification.");
+        document.getElementById("payment-proof").classList.add("hidden");
+        document.getElementById("pending-verification").classList.remove("hidden");
+      } catch (error) {
+        alert("Erreur lors de l'envoi de la preuve : " + error.message);
+      }
+    };
+
+    // ----- Notification admin -----
+    window.viewAdminMessage = function() {
+      alert("Message de l'admin : " + storedAdminMessage);
+      sessionStorage.setItem("adminMessageSeen", "true");
+      document.getElementById("admin-notification").classList.add("hidden");
+    };
+
+    window.dismissAdminMessage = function() {
+      sessionStorage.setItem("adminMessageSeen", "true");
+      document.getElementById("admin-notification").classList.add("hidden");
+    };
+
+    // ----- Activation finale -----
+    window.showFinalActivationForm = function() {
+      document.getElementById("activation-notification").classList.add("hidden");
+      document.getElementById("final-activation-form").classList.remove("hidden");
+      const email = document.getElementById("login-email").value.trim();
+      document.getElementById("final-email").value = email;
+    };
+
+    window.finalLogin = function() {
+      const email = document.getElementById("final-email").value.trim();
+      const password = document.getElementById("final-password").value;
+      const activationCodeInput = document.getElementById("final-activation-code").value.trim();
+      signInWithEmailAndPassword(auth, email, password)
+        .then(async (userCredential) => {
+          const user = userCredential.user;
+          const userDoc = await getDoc(doc(db, "users", user.uid));
+          if(userDoc.exists()){
+            const userData = userDoc.data();
+            if(userData.activationCode === activationCodeInput) {
+              alert("Connexion réussie !");
+              // Afeno ny formulaire rehetra ary asehoy ny page d'accueil
+              document.getElementById("registration-section").classList.add("hidden");
+              document.getElementById("login-section").classList.add("hidden");
+              document.getElementById("payment-instructions").classList.add("hidden");
+              document.getElementById("payment-proof").classList.add("hidden");
+              document.getElementById("pending-verification").classList.add("hidden");
+              document.getElementById("activation-notification").classList.add("hidden");
+              document.getElementById("final-activation-form").classList.add("hidden");
+              // Asehoy ny page d'accueil
+              document.getElementById("homepage"kk).classList.remove("hidden");
+            } else {
+              alert("Code d'activation incorrect.");
+            }
+          } else {
+            alert("Aucune donnée utilisateur trouvée.");
+          }
+        })
+        .catch(error => alert("Erreur : " + error.message));
+    };
+
+    // ----- Navigation ao amin'ny page d'accueil -----
+    window.showSection = function(sectionId) {
+      const sections = document.querySelectorAll(".home-section");
+      sections.forEach(section => {
+        if(section.id === sectionId) {
+          section.classList.add("active");
+        } else {
+          section.classList.remove("active");
+        }
+      });
+    };
   </script>
 </body>
-</html>
+      </html>
